@@ -1,0 +1,14 @@
+{
+  "administrator": [
+    "USER",
+    "MANAGER",
+    "ADMIN"
+  ],
+  "manager": [
+    "USER",
+    "MANAGER"
+  ],
+  "user": [
+    "USER"
+  ]
+}

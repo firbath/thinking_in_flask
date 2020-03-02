@@ -1,0 +1,17 @@
+#导出venv环境
+pip freeze > deploy/requirements.txt
+
+#部署步骤
+#基础依赖 python3 virtualenv
+python3 -m venv #VENV_DIR#
+#开启环境
+source #VENV_DIR#/bin/activate
+#退出环境
+deactivate
+
+pip install -r deploy/requirements.txt -i https://mirrors.aliyun.com/pypi/simple
+
+python src/manager.py db init
+python src/manager.py db migrate
+python src/manager.py db upgrade
+
