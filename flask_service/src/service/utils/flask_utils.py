@@ -1,21 +1,22 @@
 # -*- coding:utf-8 -*-
 """
-File: si_flask_utils.py
+File: flask_utils.py
 Author: YuFangHui
 Date: 2019-05-06
 Description:
 """
+from datetime import date, time
+from datetime import datetime as p_datetime  # 有时候会返回datatime类型
 from functools import wraps
 
 from flask import current_app
 from flask import jsonify
 from flask import request
 from flask_restful import Resource
-from service.SI_Utils import time_utils
-from service.SI_Utils import si_token_utils
-from datetime import datetime as p_datetime  # 有时候会返回datatime类型
-from datetime import date, time
 from sqlalchemy import DateTime, Numeric, String, Date, Time  # 有时又是DateTime
+
+from service.utils import jwt_utils
+from y_utils import time_utils
 
 
 def show_all_route(app):
@@ -65,7 +66,7 @@ def base_token_check(func, permission_check):
         functools.wraps 则可以将原函数对象的指定属性复制给包装函数对象, 默认有 __module__、__name__、__doc__,或者通过参数选择
         """
         token = request.headers.get("access-token")
-        rst = si_token_utils.token_decode(token)
+        rst = jwt_utils.token_decode(token)
         if rst.get('code') == 0:
             # 用户鉴权
             payload = rst.get('data')
@@ -84,7 +85,7 @@ def base_token_check(func, permission_check):
 
 def get_user():
     token = request.headers.get("access-token")
-    rst = si_token_utils.token_decode(token)
+    rst = jwt_utils.token_decode(token)
     if rst.get('code') == 0:
         payload = rst.get('data')
         if payload:

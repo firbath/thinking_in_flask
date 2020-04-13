@@ -12,12 +12,20 @@ import shutil
 from flask import current_app
 from flask_uploads import UploadSet, ALL
 
-from service.SI_Utils import time_utils, tools
 from service.module.config import get_config
+from y_utils import time_utils, tools
+from y_utils.file_utils import check_dir
 
 upload_mark = 'tk'
 upload_dest = 'UPLOADED_TK_DEST'
 map_file = 'file_map.json'
+
+
+def init_work_dir(date):
+    work_dir = os.path.join(current_app.default_config.get('data', 'work_dir'), date)
+    if check_dir(work_dir, True):
+        return work_dir
+    return None
 
 
 def upload_files(file_list, user_name):

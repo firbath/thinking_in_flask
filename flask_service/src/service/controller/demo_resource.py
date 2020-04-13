@@ -8,7 +8,7 @@ Description:
 from flask import request
 
 from service.controller.base_resource import BaseResource
-from service.SI_Utils import si_flask_utils
+from service.utils import flask_utils
 
 
 class DemoResource(BaseResource):
@@ -19,11 +19,11 @@ class DemoResource(BaseResource):
         action = body.get('action')
         data = body.get('data')
         if action == 'user_check':
-            return si_flask_utils.res_s(action=action, data=self.c_user)
+            return flask_utils.res_s(action=action, data=self.c_user)
         elif action == 'action_data':
-            return si_flask_utils.res_s(action=action, data=data)
+            return flask_utils.res_s(action=action, data=data)
         else:
-            return si_flask_utils.res_f('res no action')
+            return flask_utils.res_f('res no action')
 
     def get(self):
-        return si_flask_utils.res_s('Hello flask')
+        return flask_utils.res_s('Hello flask')

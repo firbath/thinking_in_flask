@@ -1,21 +1,13 @@
 # -*- coding:utf-8 -*-
 """
-File: FileManager.py
+File: file_utils.py
 Author: YuFangHui
 Date: 2020/2/28
 Description:
 """
 import os
+
 import requests
-
-from flask import current_app
-
-
-def init_work_dir(date):
-    work_dir = os.path.join(current_app.default_config.get('data', 'work_dir'), date)
-    if check_dir(work_dir, True):
-        return work_dir
-    return None
 
 
 def check_dir(dir_path, flag=True):

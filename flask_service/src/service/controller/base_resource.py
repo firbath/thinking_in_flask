@@ -10,16 +10,16 @@ import os
 
 from flask import current_app
 
-from service.SI_Utils import si_flask_utils
+from service.utils import flask_utils
 from service.module import config
 
 
-class BaseResource(si_flask_utils.SiResource):
+class BaseResource(flask_utils.SiResource):
     c_user = None
     si_permission = ''
 
     def __init__(self):
-        si_flask_utils.SiResource.__init__(self)
+        flask_utils.SiResource.__init__(self)
         # print self.__class__.__name__, self.__class__.res_level
 
     @classmethod

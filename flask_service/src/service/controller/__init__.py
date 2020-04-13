@@ -13,7 +13,7 @@ from service.controller import demo_resource
 from service.controller import socket_controller
 from service.controller import template_controller
 
-from service.files import file_manager
+from service.manager import file_manager
 
 
 def register_route(app):
@@ -35,18 +35,18 @@ def build_origin_entry():
     bp_entry = Blueprint("origin", __name__)
     bp_entry.add_url_rule("/", endpoint='ep_index', view_func=template_controller.demo, methods=['GET'])
 
-    # bp_entry.add_url_rule("/play/<username>", endpoint='ep_play', view_func=socket_controller.play)
-    # bp_entry.add_url_rule("/pkg01", endpoint='ep_pk01', view_func=template_controller.package01, methods=['GET'])
-    #
-    # 文件上传/下载配置
+    # WebSocket
+    bp_entry.add_url_rule("/play/<username>", endpoint='ep_play', view_func=socket_controller.play)
+    # 文件上传
     bp_entry.add_url_rule(
         "/upload_file", view_func=template_controller.upload_file, methods=['POST']
     )
+    # 文件下载
     bp_entry.add_url_rule(
         "/download_file/<filename>", endpoint='ep_download',
         view_func=template_controller.download_file, methods=['GET']
     )
-
+    # RESTFUL
     rest_api = Api(bp_entry)
     rest_api.add_resource(demo_resource.DemoResource, 'demo_api')
 

@@ -8,8 +8,6 @@ Description:
 from flask import request
 from geventwebsocket.websocket import WebSocket
 
-from service.SI_Utils import time_utils
-
 user_dict = {}
 
 

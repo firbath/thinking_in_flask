@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 """
-File: demo_service.py
+File: flask_service.py
 Author: YuFangHui
 Date: 2019/11/18
 Description:
@@ -11,7 +11,7 @@ from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
 
 from service import create_app
-from service.SI_Utils import si_flask_utils
+from service.utils import flask_utils
 
 app = create_app()
 
@@ -22,7 +22,7 @@ def run_service():
     parser.add_argument('-p', '--port', type=int, default=8083, help='main service port')
     parser.add_argument('-d', '--debug_mode', action="store_true")
     args = parser.parse_args()
-    si_flask_utils.show_all_route(app)
+    flask_utils.show_all_route(app)
     app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024
 
     server = pywsgi.WSGIServer(('0.0.0.0', args.port), app, handler_class=WebSocketHandler)

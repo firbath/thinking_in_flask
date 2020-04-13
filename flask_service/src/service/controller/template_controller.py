@@ -9,10 +9,10 @@ from flask import make_response
 from flask import render_template, request
 from flask import send_from_directory
 
-from service.files import file_manager
+from service.manager import file_manager
 from service.module import config
-from service.SI_Utils import si_flask_utils
-from service.SI_Utils import si_token_utils
+from service.utils import flask_utils
+from service.utils import jwt_utils
 
 
 def demo():
@@ -24,7 +24,7 @@ def upload_file():
     up_list = list()
     user_name = None
     token = request.headers.get("access-token")
-    rst = si_token_utils.token_decode(token)
+    rst = jwt_utils.token_decode(token)
     if rst.get('code') == 0:
         try:
             user_name = rst.get('data').get('si_name')
@@ -42,8 +42,8 @@ def upload_file():
         file_list = request.files.getlist('media')
         up_list = file_manager.upload_files(file_list, user_name)
     if up_list:
-        return si_flask_utils.res_s(action='upload_file', data=up_list)
-    return si_flask_utils.res_f(action='upload_file')
+        return flask_utils.res_s(action='upload_file', data=up_list)
+    return flask_utils.res_f(action='upload_file')
 
 
 def download_file(filename):
