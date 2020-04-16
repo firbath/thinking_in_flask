@@ -36,7 +36,7 @@ function postWithToken(url, token, action, data, callback) {
         data: JSON.stringify(body),
         contentType: "application/json",
         headers: {
-            'access-token': si_mg_token
+            'access-token': y_token
         },
         processData: false,
         success: callback

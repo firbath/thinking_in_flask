@@ -28,6 +28,33 @@ def init_work_dir(date):
     return None
 
 
+def list_my_file(user_name, check=True):
+    folder = user_name
+    destination = current_app.upload_set_config.get(upload_mark).destination
+    tar_dir = os.path.join(destination, folder)
+    check_dir(tar_dir, True)
+    src_dict = get_files_dict(tar_dir)
+    key_list = list()
+    dst_dict = dict()
+    for k, v in src_dict.items():
+        real_path = os.path.join(tar_dir, v)
+        if os.path.exists(real_path):
+            dst_dict[k] = v
+
+    if check:
+        map_path = os.path.join(tar_dir, map_file)
+        with open(map_path, 'w') as f:
+            json.dump(dst_dict, f)
+
+    for word in dst_dict.keys():
+        key_list.append({
+            'name': word,
+            'url': '/download_mine/%s/%s' % (user_name, word)
+        })
+
+    return key_list
+
+
 def upload_files(file_list, user_name):
     up_list = list()
     if not file_list:
@@ -47,7 +74,7 @@ def upload_files(file_list, user_name):
 
     for storage in file_list:
         print(storage)
-        basename = 'DH_AC_' + ac_upload_set.get_basename(storage.filename)
+        basename = 'y_' + ac_upload_set.get_basename(storage.filename)
         print(basename)
         upload_name = sign_st_name(basename)
         print(upload_name)
@@ -105,3 +132,10 @@ def get_real_name(file_dict, reg_name):
     if not real_name:
         real_name = reg_name
     return real_name
+
+
+def download_mine(user_name, target):
+    real_path = check_file(target, user_name)
+    if not real_path:
+        return None
+    return os.path.split(real_path)

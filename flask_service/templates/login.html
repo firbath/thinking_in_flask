@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Y LOGIN</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        @import url("../static/css/base_v0.2.1.css");
+    </style>
+</head>
+<body>
+<h3>用户登录</h3>
+<form action="#" method="POST">
+    <label>账号</label>
+    <input id="text_usr" type="text" name="name" placeholder="name"/><br>
+    <label>密码</label>
+    <input id="text_pwd" type="password" name="pw" placeholder="password"/><br>
+    <br>
+    <button id="btn_login" class="ajax" value="login">登录</button>
+    <br>
+</form>
+</body>
+<script>
+
+    $(document).ready(init);
+    let auth_url = '/auth/login_api';
+    let target_url = '/res';
+
+    function init() {
+
+        $("#btn_login").click(function () {
+            let action = $(this).attr('value');
+            let body = JSON.stringify({
+                action: action,
+                data: {
+                    user_name: $("#text_usr").val(),
+                    password: $("#text_pwd").val()
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: auth_url,
+                data: body,
+                contentType: "application/json",
+                processData: false,
+                success: authCallback
+            });
+        });
+
+    }
+
+    function authCallback(data, status) {
+        if (status !== 'success') {
+            alert(status);
+            return;
+        }
+        if (data.success && data.data) {
+            $.cookie('y_token', data.data['token'], {expires: 7, path: '/'});
+            alert('登录成功');
+            window.location.replace(target_url);
+        } else {
+            alert(JSON.stringify(data, null, 4));
+        }
+    }
+
+
+</script>
+</html>

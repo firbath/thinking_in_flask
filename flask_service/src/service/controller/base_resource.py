@@ -14,30 +14,30 @@ from service.utils import flask_utils
 from service.module import config
 
 
-class BaseResource(flask_utils.SiResource):
+class BaseResource(flask_utils.FlaskResource):
     c_user = None
-    si_permission = ''
+    f_permission = ''
 
     def __init__(self):
-        flask_utils.SiResource.__init__(self)
+        flask_utils.FlaskResource.__init__(self)
         # print self.__class__.__name__, self.__class__.res_level
 
     @classmethod
     def permission_check(cls, payload):
         if payload:
-            si_role = payload.get('si_role')
+            f_role = payload.get('role')
 
             # 解析用户
             cls.c_user = {
-                'user_name': payload.get('si_name'),
-                'nick_name': payload.get('si_nick'),
-                'role': si_role,
-                'login_time': payload.get('si_time')
+                'user_name': payload.get('user_name'),
+                'nick_name': payload.get('nick_name'),
+                'role': f_role,
+                'login_time': payload.get('login_time')
             }
 
             # 系统指令,跳过权限
-            if payload.get('iss') == 'si_system':
-                current_app.app_logger.warning('si_system request')
+            if payload.get('iss') == 'system':
+                current_app.app_logger.warning('system request')
                 return True
 
             # 校验权限
@@ -45,9 +45,9 @@ class BaseResource(flask_utils.SiResource):
             permissions = list()
             try:
                 with open(path, 'r') as f:
-                    permissions = permissions + json.load(f).get(si_role)
+                    permissions = permissions + json.load(f).get(f_role)
             except Exception as e:
                 print(e)
-            return cls.si_permission in permissions
+            return cls.f_permission in permissions
 
         return False

@@ -90,10 +90,10 @@ def get_user():
         payload = rst.get('data')
         if payload:
             return {
-                'user_name': payload.get('si_name'),
-                'nick_name': payload.get('si_nick'),
-                'role': payload.get('si_role'),
-                'login_time': payload.get('si_time')
+                'user_name': payload.get('user_name'),
+                'nick_name': payload.get('nick_name'),
+                'role': payload.get('role'),
+                'login_time': payload.get('login_time')
             }
     return None
 
@@ -167,20 +167,20 @@ def convert_datetime(value):
         return ""
 
 
-class SiResource(Resource):
-    si_permission = ''
+class FlaskResource(Resource):
+    f_permission = ''
 
     def __init__(self):
         # 通过method_decorators管理注解,实现对所用方法的权限约束
         # 通过token实现user-role-permission权限管理
         # si_permission为空,无须校验,不添加权限注解
-        if self.__class__.si_permission and self.__class__.token_check not in self.__class__.method_decorators:
+        if self.__class__.f_permission and self.__class__.token_check not in self.__class__.method_decorators:
             self.__class__.method_decorators = self.__class__.method_decorators + [self.__class__.token_check]
             print(self.__class__.method_decorators)
 
     @classmethod
     def permission_check(cls, payload):
-        print('SiResource permission_check', cls.__name__)
+        print('Resource permission_check', cls.__name__)
         print('payload', payload)
         return False
 

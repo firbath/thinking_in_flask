@@ -9,10 +9,11 @@ from flask import request
 
 from service.controller.base_resource import BaseResource
 from service.utils import flask_utils
+from service.manager import file_manager
 
 
 class DemoResource(BaseResource):
-    si_permission = 'USER'
+    f_permission = 'USER'
 
     def post(self):
         body = request.get_json()
@@ -24,6 +25,23 @@ class DemoResource(BaseResource):
             return flask_utils.res_s(action=action, data=data)
         else:
             return flask_utils.res_f('res no action')
+
+    def get(self):
+        return flask_utils.res_s('Hello flask')
+
+
+class FileResource(BaseResource):
+    f_permission = 'USER'
+
+    def post(self):
+        body = request.get_json()
+        action = body.get('action')
+        data = body.get('data')
+        if action == 'list_file':
+            rst = file_manager.list_my_file(data.get('user_name'))
+            return flask_utils.res_s(action=action, data=rst)
+        else:
+            return flask_utils.res_f('FileResource no action')
 
     def get(self):
         return flask_utils.res_s('Hello flask')
