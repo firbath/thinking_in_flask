@@ -1,4 +1,6 @@
 /.idea
 /venv
-*/migrations
+/migrations
 *.pyc
+*.demo_data.*
+*.bak.zip

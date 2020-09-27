@@ -17,17 +17,25 @@ from service.utils import flask_utils
 from service.utils import jwt_utils
 
 
+def get_context():
+    context = dict()
+    context['context'] = config.get_config().get('config', 'context')
+    return context
+
+
 def demo():
     # return 'Hello World'
-    return render_template('demo.html')
+    return render_template('demo.html', **get_context())
 
 
 def login():
-    return render_template('login.html')
+    context = get_context()
+    context['tar'] = request.args.get('tar', default='news')
+    return render_template('auth/login.html', **context)
 
 
 def my_res():
-    return render_template('my_res.html')
+    return render_template('my_res.html', **get_context())
 
 
 def upload_file():

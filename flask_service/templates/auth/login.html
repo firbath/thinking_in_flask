@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Y LOGIN</title>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/jquery.cookie.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/yu_utils.js') }}"></script>
+    <style type="text/css">
+        @import url("{{ url_for('static', filename = 'css/bootstrap.min.css') }}");
+        @import url("{{ url_for('static', filename = 'css/base_v0.2.1.css') }}");
+    </style>
+</head>
+<body>
+<h3>用户登录</h3>
+<form action="#" method="POST">
+    <label>账号</label>
+    <input id="text_usr" type="text" name="name" placeholder="name"/><br>
+    <label>密码</label>
+    <input id="text_pwd" type="password" name="pw" placeholder="password"/><br>
+    <br>
+    <button id="btn_login" class="ajax" value="login">登录</button>
+    <br>
+</form>
+</body>
+<script>
+
+    var auth_url = '{{context}}/auth/login_api';
+    var target_url = '{{context}}/{{tar}}';
+    $(document).ready(function () {
+        $("#btn_login").click(function () {
+            let action = $(this).attr('value');
+            let body = JSON.stringify({
+                action: action,
+                data: {
+                    user_name: $("#text_usr").val(),
+                    password: $("#text_pwd").val()
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: auth_url,
+                data: body,
+                contentType: "application/json",
+                processData: true,
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                    if (status !== 'success') {
+                        alert(status);
+                        return;
+                    }
+                    if (data.success && data.data) {
+                        $.cookie('y_token', data.data['token'], {expires: 7, path: '{{context}}/'});
+                        alert('登录成功');
+                        window.location.replace(target_url);
+                    } else {
+                        alert(JSON.stringify(data, null, 4));
+                    }
+                }
+            });
+        });
+    });
+
+</script>
+</html>

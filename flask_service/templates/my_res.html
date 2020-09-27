@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Y RES</title>
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    <script src="../static/javascript/yu_utils.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/jquery.cookie.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/yu_utils.js') }}"></script>
     <style type="text/css">
-        @import url("../static/css/base_v0.2.1.css");
+        @import url("{{ url_for('static', filename = 'css/bootstrap.min.css') }}");
+        @import url("{{ url_for('static', filename = 'css/base_v0.2.1.css') }}");
     </style>
 </head>
 <body>
@@ -57,17 +55,21 @@
     function init() {
 
         initUpload();
-        postWithToken('/auth/auth_api', y_token, 'user_check', null, userCallback);
+        postWithToken('{{context}}/auth/auth_api', y_token, 'user_check', null, userCallback);
 
         $("#btn_login").click(function (event) {
-            $.cookie('y_token', null, {expires: 7, path: '/'});
-            window.location.replace('/auth/login');
+            logout();
         });
 
     }
 
+    function logout() {
+        $.cookie('y_token', null, {expires: 7, path: '{{context}}/'});
+        window.location.replace('{{context}}/auth/login?tar=res');
+    }
+
     function list_my_file(user_name) {
-        postWithToken('/file_api', y_token, 'list_file',
+        postWithToken('{{context}}/file_api', y_token, 'list_file',
             {user_name: user_name}, function (data, status) {
                 if (status !== 'success') {
                     alert(JSON.stringify(data));
@@ -81,14 +83,12 @@
 
     function userCallback(data, status) {
         if (status !== 'success') {
-            window.location.replace('/auth/login');
-            alert(JSON.stringify(data));
+            logout();
         }
         if (data.action === 'user_check' && data.data) {
             showLoginInfo(data.data);
         } else {
-            window.location.replace('/auth/login');
-            alert(JSON.stringify(data));
+            logout();
         }
     }
 
@@ -100,16 +100,14 @@
             label.html('您好, ' + user.nick_name + ' ');
             button.html('登出');
             button.unbind("click").click(function (event) {
-                $.cookie('y_token', null, {expires: 7, path: '/'});
-                window.location.replace('/auth/login');
+                logout();
             });
             list_my_file(c_user.user_name);
         } else {
             label.html('请先登录');
             button.html('登录');
             button.unbind("click").click(function (event) {
-                $.cookie('y_token', null, {expires: 7, path: '/'});
-                window.location.replace('/auth/login');
+                logout();
             });
         }
 
@@ -135,7 +133,7 @@
                     return xhr;
                 },
                 type: 'POST',
-                url: '/upload_file',
+                url: '{{context}}/upload_file',
                 cache: false,
                 data: formData,
                 // 告诉 jQuery 不要去处理发送的数据

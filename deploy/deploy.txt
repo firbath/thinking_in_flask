@@ -1,17 +1,31 @@
-#导出venv环境
-pip freeze > deploy/requirements.txt
+虚拟环境
 
-#部署步骤
-#基础依赖 python3 virtualenv
-python3 -m venv #VENV_DIR#
-#开启环境
-source #VENV_DIR#/bin/activate
-#退出环境
-deactivate
+    #导出venv环境
+    pip freeze > deploy/requirements.txt
+    #基础依赖 python3 virtualenv
+    python3 -m venv #VENV_DIR#
+    #开启环境
+    source #VENV_DIR#/bin/activate
+    #退出环境
+    deactivate
 
-pip install -r deploy/requirements.txt -i https://mirrors.aliyun.com/pypi/simple
+    pip install -r deploy/requirements.txt -i https://mirrors.aliyun.com/pypi/simple
+    pip install -i https://mirrors.aliyun.com/pypi/simple
 
-python src/manager.py db init
-python src/manager.py db migrate
-python src/manager.py db upgrade
+数据库
+
+    python flask_service/src/manager.py db init
+    python flask_service/src/manager.py db migrate
+    python flask_service/src/manager.py db upgrade
+
+https证书相关
+
+    # 生成私钥，按照提示填写内容
+    openssl genrsa -des3 -out server.key.org 2048
+    # 生成csr文件 ，按照提示填写内容
+    openssl req -new -key server.key.org -out server.csr
+    # 生成公钥
+    openssl rsa -in server.key.org -out server.key
+    # 生成crt文件，有效期10年（3650天）
+    openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
 

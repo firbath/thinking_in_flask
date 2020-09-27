@@ -34,13 +34,6 @@ def get_param_dir():
     return dir_path
 
 
-def get_dh_dir():
-    dir_path = os.path.split(os.path.realpath(__file__))[0] + '/../../../dh'
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
-    return dir_path
-
-
 def get_version():
     path = os.path.split(os.path.realpath(__file__))[0] + '/../../../ver.txt'
     ver = tools.read_file(path)
