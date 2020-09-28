@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Service</title>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/jquery.cookie.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'javascript/yu_utils.js') }}"></script>
+    <style type="text/css">
+        @import url("{{ url_for('static', filename = 'css/bootstrap.min.css') }}");
+        @import url("{{ url_for('static', filename = 'css/base_v0.2.1.css') }}");
+    </style>
+</head>
+<body>
+<h3>
+    PI DEMO
+</h3>
+<br>
+<button id="btn_once" type="submit" value="once">ONCE</button>
+<button id="btn_go" type="submit" value="login">START</button>
+<br><label id="tv_01">pi:<br>count:</label><br>
+<canvas id="canvas_main" width="400" height="400" style="border:0 dotted #000000; background:#ffffff;">
+    this is canvas.
+</canvas>
+
+<script>
+
+    const canvas_main = $("#canvas_main")[0];
+    const context_main = canvas_main.getContext("2d");
+    let btn_go = $("#btn_go");
+    let btn_once = $("#btn_once");
+
+    let inCount = 0, outCount = 0;
+    let interval;
+
+    let cx = 200, cy = 200, r = 200;
+    $(document).ready(init);
+
+    function init() {
+
+        btn_go.unbind("click").click(function (event) {
+            piStart();
+        });
+        btn_once.unbind("click").click(function (event) {
+            onDrawOnce();
+        });
+
+        drawCircle(context_main, cx, cy, r, "#000000");
+
+    }
+
+    function piStart() {
+        interval = setInterval(onDrawOnce);
+        btn_go.html('PAUSE');
+        btn_go.unbind("click").click(function (event) {
+            piStop();
+        });
+    }
+
+    function piStop() {
+        clearInterval(interval);
+        btn_go.html('RESUME');
+        btn_go.unbind("click").click(function (event) {
+            piStart();
+        });
+    }
+
+
+    function onDrawOnce() {
+
+        let x = Math.random() * 2 * r;
+        let y = Math.random() * 2 * r;
+
+        if (checkInCircle(x, y, cx, cy, r)) {
+            drawCircle(context_main, x, y, 2, "#00ffff", true);
+            inCount++;
+        } else {
+            drawCircle(context_main, x, y, 2, "#ff0000", true);
+            outCount++
+        }
+        drawCircle(context_main, cx, cy, r, "#000000");
+        // computePI
+        let pi = inCount * 4 / (inCount + outCount);
+        // console.log('pi=' + pi + '|' + (inCount + outCount));
+        $("#tv_01").html('pi:' + pi + '<br>' + 'count:' + (inCount + outCount));
+    }
+
+    function drawCircle(ctx, x, y, r, color, fill = false) {
+
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2, true);
+        ctx.closePath();
+        if (fill) {
+            ctx.fillStyle = color;
+            ctx.fill();
+        } else {
+            ctx.strokeStyle = color;
+            ctx.stroke();
+        }
+
+    }
+
+    function checkInCircle(x, y, cx, cy, r) {
+        return r * r > (x - cx) * (x - cx) + (y - cy) * (y - cy)
+    }
+
+</script>
+
+</body>
+</html>

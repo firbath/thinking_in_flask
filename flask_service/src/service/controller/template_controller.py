@@ -38,6 +38,10 @@ def my_res():
     return render_template('my_res.html', **get_context())
 
 
+def demo_pi():
+    return render_template('demo_pi.html', **get_context())
+
+
 def upload_file():
     up_list = list()
     user_name = None

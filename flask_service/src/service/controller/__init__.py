@@ -35,6 +35,7 @@ def build_origin_entry():
     bp_entry = Blueprint("origin", __name__)
     bp_entry.add_url_rule("/", endpoint='ep_index', view_func=template_controller.demo, methods=['GET'])
     bp_entry.add_url_rule("/res", endpoint='ep_res', view_func=template_controller.my_res, methods=['GET'])
+    bp_entry.add_url_rule("/pi", endpoint='ep_pi', view_func=template_controller.demo_pi, methods=['GET'])
 
     # WebSocket
     bp_entry.add_url_rule("/play/<username>", endpoint='ep_play', view_func=socket_controller.play)
