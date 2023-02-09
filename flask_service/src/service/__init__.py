@@ -34,7 +34,7 @@ def create_app():
     # 全局前缀
     url_prefix = get_config().get('config', 'context')
     if url_prefix:
-        from werkzeug.wsgi import DispatcherMiddleware
+        from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
         def simple(env, resp):
             resp('200 OK', [('Content-Type', 'text/plain')])
