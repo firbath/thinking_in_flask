@@ -12,6 +12,9 @@
     pip install -r deploy/requirements.txt -i https://mirrors.aliyun.com/pypi/simple
     pip install -i https://mirrors.aliyun.com/pypi/simple
 
+    conda list -e  > deploy/req_demo.txt
+    conda install --yes --file deploy/req_demo.txt
+
 数据库
 
     python flask_service/src/manager.py db init
