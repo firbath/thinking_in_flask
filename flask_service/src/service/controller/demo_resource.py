@@ -10,10 +10,11 @@ from flask import request
 from service.controller.base_resource import BaseResource
 from service.utils import flask_utils
 from service.manager import file_manager
+from service.manager import demo_manager
 
 
 class DemoResource(BaseResource):
-    f_permission = 'USER'
+    f_permission = ''
 
     def post(self):
         body = request.get_json()
@@ -23,6 +24,8 @@ class DemoResource(BaseResource):
             return flask_utils.res_s(action=action, data=self.c_user)
         elif action == 'action_data':
             return flask_utils.res_s(action=action, data=data)
+        elif action == 'calculate_24':
+            return demo_manager.demo_play(action=action, data=data)
         else:
             return flask_utils.res_f('res no action')
 
